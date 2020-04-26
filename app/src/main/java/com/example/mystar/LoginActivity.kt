@@ -80,7 +80,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun googleLogin() {
-        println("::googleLogin::")
         var signInIntent = googleSignInClient?.signInIntent
         startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
     }
@@ -125,8 +124,6 @@ class LoginActivity : AppCompatActivity() {
 
         if (requestCode == GOOGLE_LOGIN_CODE) {
             var result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-
-            println(result)
 
             if (result != null) {
                 if (result.isSuccess) {
