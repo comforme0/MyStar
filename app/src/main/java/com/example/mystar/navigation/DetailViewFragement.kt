@@ -43,6 +43,8 @@ class DetailViewFragement : Fragment() {
                 contentDTOs.clear()
                 contentUidList.clear()
 
+                if (querySnapshot == null) return@addSnapshotListener
+
                 for (snapshot in querySnapshot!!.documents) {
                     var item = snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
@@ -87,6 +89,15 @@ class DetailViewFragement : Fragment() {
                 viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
             } else {
                 viewHolder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            viewHolder.detailviewitem_profile_image.setOnClickListener {
+                var fragement = UserViewFragment()
+                var bundle = Bundle()
+                bundle.putString("destinationUid", contentDTOs[position].uid)
+                bundle.putString("userId", contentDTOs[position].userId)
+                fragement.arguments = bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragement)?.commit()
             }
         }
 
