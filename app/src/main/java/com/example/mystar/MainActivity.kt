@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.mystar.navigation.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -39,8 +40,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.action_account -> {
-                var userViewFragement = UserViewFragement()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, userViewFragement).commit()
+                var userViewFragment = UserViewFragment()
+                var bundle = Bundle()
+                var uid = FirebaseAuth.getInstance().currentUser?.uid
+                bundle.putString("destinationUid", uid)
+                userViewFragment.arguments = bundle
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, userViewFragment).commit()
                 return true
             }
         }
