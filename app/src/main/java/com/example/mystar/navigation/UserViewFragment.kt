@@ -1,12 +1,14 @@
 package com.example.mystar.navigation
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -76,11 +78,12 @@ class UserViewFragment : Fragment() {
             activity?.startActivityForResult(photoPickerIntent, PICK_PROFILE_FROM_ALBUM)
         }
         getProfileImage()
+        getFollowerAndFollowing()
         return fragmentView
     }
 
     fun getFollowerAndFollowing() {
-        firestore?.collection("users")?.document(uid)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+        firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if (documentSnapshot == null) return@addSnapshotListener
 
             var followDTO = documentSnapshot.toObject(FollowDTO::class.java)
@@ -89,7 +92,18 @@ class UserViewFragment : Fragment() {
                 fragmentView?.account_tv_follow_count?.text = followDTO?.followingCount.toString()
             }
             if (followDTO?.followerCount != null) {
-                fragmentView?.account_tv_follow_count.text = followDTO?.followerCount.toString()
+                fragmentView?.account_tv_follow_count?.text = followDTO?.followerCount.toString()
+
+                if (followDTO?.followers?.containsKey(currentUserUid!!)) {
+                    fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
+                    fragmentView?.account_btn_follow_signout?.background?.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorLightGray), PorterDuff.Mode.MULTIPLY)
+                } else {
+
+                    if (uid != currentUserUid) {
+                        fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
+                        fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
+                    }
+                }
             }
         }
     }
