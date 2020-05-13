@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setToolbarDefult()
         when (p0.itemId) {
             R.id.action_home -> {
-                var detailViewFragement = DetailViewFragement()
+                var detailViewFragement = DetailViewFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content, detailViewFragement).commit()
                 return true
             }
