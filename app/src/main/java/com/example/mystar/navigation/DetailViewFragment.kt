@@ -1,5 +1,6 @@
 package com.example.mystar.navigation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
-class DetailViewFragement : Fragment() {
+class DetailViewFragment : Fragment() {
     var firestore: FirebaseFirestore? = null;
     var uid: String? = null
 
@@ -98,6 +99,12 @@ class DetailViewFragement : Fragment() {
                 bundle.putString("userId", contentDTOs[position].userId)
                 fragement.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragement)?.commit()
+            }
+
+            viewHolder.detailviewitem_comment_imageview.setOnClickListener { v ->
+                var intent = Intent(v.context, CommentActivity::class.java)
+                intent.putExtra("contentUid", contentUidList[position])
+                startActivity(intent)
             }
         }
 
